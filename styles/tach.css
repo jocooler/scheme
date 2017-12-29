@@ -1,0 +1,23 @@
+body {
+	padding-top:5rem;
+}
+.outside {
+	padding:3rem 1.5rem;
+}
+
+th {
+	text-transform:capitalize;
+}
+td div.long-wrapper {
+	max-height:150px;
+	overflow:auto;
+	overflow-x:hidden;
+}
+
+tr td:nth-of-type(1) {
+	text-align:center;
+}
+
+.chosen-container { /* Fixes the fact that sometimes the dropdowns are 0 width.
+	width: 100% !important;
+}

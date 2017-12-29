@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Tachometer</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/datatables/dataTables.bootstrap4.min.css"/>
+<link rel="stylesheet" href="resources/chosen/chosen.min.css">
+<link rel="stylesheet" href="styles/data.css">
+</head>
+<body>
+<div class="modal fade" id="login">
+	<div class="modal-dialog" role="document">
+		<form onsubmit="return false">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Please Login</h5>
+				</div>
+				<div class="modal-body">
+					<div class="p-3 mb-1 bg-danger text-white" id="loginerror">That didn't work. Please try to log in again.</div>
+					<div class="form-group">
+						<label for="username">Username *</label>
+						<input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="your username" required>
+						<small id="usernameHelp" class="form-text text-muted">The username to login to your computer or Office365, like apendragon.</small>
+					</div>
+					<div class="form-group">
+						<label for="password">Password *</label>
+						<input type="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="your password" required>
+						<small id="passwordHelp" class="form-text text-muted">The password to login to your computer or Office365, like 4correctbatteryhorse-staples.</small>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" onclick="login()">Login</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+	<div class="container outside">
+	<h2>VTrans Performance Report</h2>
+	<h2><small id="measureName"></small></h2>
+		<form>
+			<div class="form-group" id="measure-group">
+				<label class="form-control-label" for="measure">Measure *</label class="form-control-label">
+				<small id="measureHelp" class="form-text text-muted">Which measure are you reporting? (choose from the list)</small>
+				<select class="form-control" id="measure" aria-describedby="measureHelp" required>
+					<option></option>
+				</select>
+			</div>
+			<div class="form-group" id="date-group">
+				<label class="form-control-label" for="date">Date *</label class="form-control-label">
+				<small id="dateHelp" class="form-text text-muted">What is the date for the value you're reporting?</small>
+				<div class="row">
+					<div class="col year">
+						<select class="form-control year">
+						</select>
+					</div>
+					<div class="col quarter">
+						<select class="form-control quarter">
+							<option value="Q1">Q1</option>
+							<option value="Q2">Q2</option>
+							<option value="Q3">Q3</option>
+							<option value="Q4">Q4</option>
+						</select>
+					</div>
+					<div class="col month">
+						<select class="form-control month">
+							<option value="1">January</option>
+							<option value="2">February</option>
+							<option value="3">March</option>
+							<option value="4">April</option>
+							<option value="5">May</option>
+							<option value="6">June</option>
+							<option value="7">July</option>
+							<option value="8">August</option>
+							<option value="9">September</option>
+							<option value="10">October</option>
+							<option value="11">November</option>
+							<option value="12" selected="selected">December</option>
+						</select>
+					</div>
+					<div class="col day">
+						<input type="number" min=1 max=31 step=1 class="form-control day">
+					</div>
+				</div>
+			</div>
+			<div class="form-group" id="value-group">
+				<label class="form-control-label" for="value">Value *</label class="form-control-label">
+				<small id="valueHelp" class="form-text text-muted">What is the value of this KPI for the report date? (numbers only)</small>
+				<input type="number" class="form-control" id="value" aria-describedby="valueHelp" placeholder="enter the value" required>
+			</div>
+			<div class="form-group" id="target-group">
+				<label class="form-control-label" for="target">Target *</label class="form-control-label">
+				<small id="targetHelp" class="form-text text-muted">What is the target for this KPI for the report date? (numbers only)</small>
+				<input type="number" class="form-control" id="target" aria-describedby="targetHelp" placeholder="enter the target" required>
+			</div>
+			<div class="form-group" id="story-group">
+				<label class="form-control-label" for="story">Story *</label class="form-control-label">
+				<small id="storyHelp" class="form-text text-muted">Why is this measure currently at this value?</small>
+				<textarea id="story" class="form-control" aria-describedby="storyHelp" placeholder="This measure is currently above the target because our mitigation strategies are working effectively, and we had a lower number of new incidents than expected." required></textarea>
+			</div>
+			<button id="submit" class="btn btn-success" type="button">Submit</button> 
+			<a id="factsheet-link" class="btn btn-info float-right" target="_blank" href="">Factsheet</a>
+			<small class="form-text text-muted">If you have questions, need help with this form, or need to make a correction, please contact the <a href="mailto:AOT.PerformanceCIUnit@vermont.gov" target="_top">performance section.</a> </small>
+		</form>
+	</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+<script src="resources/datatables/jquery.dataTables.min.js"></script>
+<script src="resources/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="resources/chosen/chosen.jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+<script src="scripts/connection.js"></script>
+<script src="scripts/data.js"></script>
+<script>
+var	measureName = 'Please chose a measure',
+	value = '',
+	target = '';
+	token = '',
+	measures = {},
+	measure = {};
+	
+$(document).ready(function() {
+	$('#submit').click(submit);
+	$('input, select, textarea').change(function() {
+		$('#submit').html('Submit').attr('disabled', false);
+	});
+
+	if (window.localStorage && window.localStorage.performanceDreamfactoryToken) {
+		token = window.localStorage.performanceDreamfactoryToken;
+		getMeasures({limit: 1}, function (r) {
+			if (r.status > 300) {
+				$('#login').modal({backdrop:'static', keyboard:false});
+			} else {
+				getMeasureChoices();
+			}
+		});
+	} else {
+		$('#login').modal({backdrop:'static', keyboard:false});
+	}
+	$('#factsheet-link').attr('href', factsheetURL);
+});
+
+function login() {
+	adlogin($('#username').val(), $('#password').val(), 
+		function(response) {
+			$('#password').val('')
+			$('#loginerror').css('opacity', 0);
+			if (response.status > 300) {
+				setTimeout(function() {
+					$('#loginerror').css('opacity', 1);
+				}, 500);
+			} else {
+				$('#login').modal('hide');
+				console.log(arguments)
+				token = response.session_token;
+				window.localStorage.performanceDreamfactoryToken = response.session_token;
+				getMeasureChoices();
+			}
+		}
+	);
+}
+
+function getMeasureChoices() {
+	getMeasures({fields: 'id,name', related:'section_by_section,update_frequency_by_frequency,type_by_type'}, function (response) {
+		var optgroups = {};
+		$.each(response, function (i, v) {
+			measures[v.id] = v;
+			if (!optgroups[v.section_by_section.name]) {
+				optgroups[v.section_by_section.name] = [];
+			}
+			optgroups[v.section_by_section.name].push({name: v.name, id: v.id, type:v.type_by_type.name})
+		});
+		$.each(Object.keys(optgroups).sort(), function (i, k) {
+			var group = document.createElement('optgroup');
+			group.label = k;
+			
+			$.each(optgroups[k].sort(function (a, b) { if (a.name < b.name) return -1; return 1; }), function (i, v) {
+				var option = document.createElement('option');
+				option.value = v.id;
+				option.innerHTML = v.name;
+				option.setAttribute('type', v.type);
+				$(group).append(option);
+			});
+			
+			$('#measure').append(group);
+		});
+		$('#measure').chosen();
+		$('#measure, #value, #target').change(function() {
+			measure = measures[$('#measure option:selected').val()];
+			updateDates(measure);
+			measureName = measure.name;
+			value = $('#value').val();
+			target = $('#target').val();
+			$('#factsheet-link').attr('href', factsheetURL + measure.id);
+			
+			if (measureName && value) {
+				if (target) {
+					$('#storyHelp').html('Why is <b>' + measureName + '</b> currently at <b>' + value + '</b> when the target is <b>' + target + '</b>?');
+				} else {
+					$('#storyHelp').html('Why is <b>' + measureName + '</b> currently at <b>' + value + '</b>?');
+				}
+			}
+			
+			if ($('#measure option:selected').attr('type') === 'Fact') {
+				$('#target-group').hide();
+			} else {
+				$('#target-group').show();
+			}
+		});
+	});
+}
+
+
+
+function submit() {
+	var value = $('#value').val(),
+		target = $('#target').val(),
+		story = $('#story').val(),
+		date = true;
+		
+	var year = $('select.year').val(),
+		quarter = $('select.quarter').val(),
+		month = $('select.month option:selected').val(),
+		day = $('select.day').val();
+	
+	if (!measure) {
+		$('#measure').addClass('is-invalid');
+		return;
+	}
+	
+	if (measure.update_frequency_by_frequency) {
+		switch (measure.update_frequency_by_frequency.name.toLowerCase()) { //first check that we have all components
+			case 'hourly': //todo hourly UI
+			case 'daily':
+			case 'weekly':
+				if (!day) {
+					date = false;
+				}
+			case 'monthly':
+				if (!month) {
+					date = false;
+				}
+			case 'annually': // cases fall through to here
+				if (!year) {
+					date = false;
+				}
+				break;
+			case 'quarterly':
+				if (!quarter || !year) {
+					date = false;
+				}
+				break;
+			default:
+				break;
+		}
+		
+		if (date) { //we have all the fields we need...
+			switch (measure.update_frequency_by_frequency.name.toLowerCase()) {
+				case 'hourly':
+				case 'daily':
+				case 'weekly':
+					date = moment(month + "-" + day + "-" + year, "M-D-YYYY");
+					break;
+				case 'monthly':
+					date = moment(month + "-01-" + year, "M-D-YYYY").endOf('month');
+					break;
+				case 'annually':
+					date = moment("12-31-" + year, "M-D-YYYY");
+					break;
+				case 'quarterly':
+					switch (quarter) {
+						case 'Q1':
+							date = moment("3-31-" + year, "M-D-YYYY");
+							break;
+						case 'Q2':
+							date = moment("6-30-" + year, "M-D-YYYY");
+							break;
+						case 'Q3':
+							date = moment("9-30-" + year, "M-D-YYYY");
+							break;
+						case 'Q4':
+							date = moment("12-31-" + year, "M-D-YYYY");
+							break;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+		
+	$('.is-invalid').removeClass('is-invalid');
+	
+	if (measure && date && value && story && (target || !target && $('#measure option:selected').attr('type') === 'Fact')) { //it must have a target OR be a fact.
+		var data = {date:date.format('YYYY-MM-DD'), measure: measure.id, status:story, target:target || 0, value: value};
+		if ($('#measure option:selected').attr('type') === 'Fact') {
+		  data.target = 0;
+		}
+		setData(JSON.stringify({"resource": [data]}), function(r) {
+			console.log(r);
+			if (r[0].id) {
+				$('#submit').html('✔ Submitted').attr('disabled', 'disabled');
+			}
+		});
+	} else {
+	
+		if (!measure) {
+			$('#measure').addClass('is-invalid');
+		}
+		if (!date) {
+			$('#date').addClass('is-invalid');
+		}
+		if (!value) {
+			$('#value').addClass('is-invalid');
+		}
+		if (!target && $('#measure option:selected').attr('type') !== 'Fact') {
+			$('#target').addClass('is-invalid');
+		}
+		if (!story) {
+			$('#story').addClass('is-invalid');
+		}
+	}
+}
+
+function updateDates(measure) {
+	$('#date-group input, #date-group select, #date-group div').show();
+
+	switch (measure.update_frequency_by_frequency.name.toLowerCase()) { //first check that we have all components
+		case 'hourly': //todo hourly UI
+		case 'daily':
+		case 'weekly':
+			$('.quarter').hide();
+			break;
+		case 'monthly':
+			$('.quarter').hide();
+			$('.day').hide();
+			break;
+		case 'annually':
+			$('.quarter').hide();
+			$('.month').hide();
+			$('.day').hide();
+			break;
+		case 'quarterly':
+			$('.day').hide();
+			$('.month').hide();
+			break;
+		default:
+			break;
+	}
+}
+
+//prevent scrolling from changing inputs in chrome.
+$(document).ready(function() {
+	$('input[type=number], input[type=date]').on('mousewheel wheel',function(e){ $(this).blur(); });
+	var year = new Date().getFullYear();
+	for (var i = 0; i<35; i++) {
+		var n = year - 10 + i,
+			selected = (n === year) ? ' selected="selected"' : ''; //auto select this year.
+		$('select.year').append('<option val="' + n +'"'+ selected + '>' + n + '</option>');
+	}
+});
+
+</script>
+</body>
+</html>
