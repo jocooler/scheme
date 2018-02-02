@@ -33,7 +33,6 @@ var Dreamer = function(api_key, token, base, endpoint, tableID) {
 			} else { // when we first load stuff before initializing datatables.
 				$('tbody', this.table).append(tr);
 			}
-			$('select', $(tr)).chosen({disable_search_threshold: 10}); // have to be post-dom attachment
 			$('td div[contenteditable="true"], select', $(tr)).on('change, input', function (event) {self.updateModel.apply(self, [event, self])}); // attach handler
 		},
 		
@@ -269,6 +268,7 @@ var Dreamer = function(api_key, token, base, endpoint, tableID) {
 						order: [[1, 'asc']],
 						pageLength: 25,
 						drawCallback: function () {
+							$('tr select').chosen({disable_search_threshold: 10}); // have to be post-dom attachment
 							$.debounce(function() {
 								$('tr').each(function() {
 									self.rowHeight(this);
