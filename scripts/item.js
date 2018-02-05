@@ -82,7 +82,31 @@ function setData(params, callback) {
 }
 
 function processSchema(response) {
-	var r = response;
+	var r = response,
+		t = $($('#inputTemplate').html()),
+		p = $('#mainForm');
+	
+	console.log(r);
+	
+	$.each(r.field, function(i, v) {
+		var e = $(t.clone());
+		
+		$('label', e).text(v.label);
+		
+		switch (v.type) {
+			case 'id':
+				$('input', e)[0].type = 'number';
+				break;
+			case 'string':
+				$('input', e)[0].type = 'text';
+				$('input', e)[0].maxLength = 255;
+				break;
+			case 'text':
+				$('input', e).replaceWith('<textarea class="form-control"></textarea>');
+		}
+		
+		$(p).append(e);
+	});
 }
 
 function submit() {
