@@ -73,11 +73,11 @@ $(document).ready(function() {
 	//login or kickoff.
 	if (window.localStorage && window.localStorage.performanceDreamfactoryToken) {
 		token = window.localStorage.performanceDreamfactoryToken;
-		init({limit: 1}, function (r) {
+		getDF(schemaEndpoint, {limit: 1}, function (r) {
 			if (r.status > 300) {
 				$('#login').modal({backdrop:'static', keyboard:false});
 			} else {
-				init();
+				processSchema(r);
 			}
 		});
 	} else {
@@ -107,7 +107,7 @@ function login() {
 				console.log(arguments)
 				token = response.session_token;
 				window.localStorage.performanceDreamfactoryToken = response.session_token;
-				init();
+				getDF(schemaEndpoint, null, processSchema(r));
 			}
 		}
 	);

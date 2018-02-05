@@ -1,9 +1,9 @@
 var schemaEndpoint, dataEndpoint;
-$(document).ready(function() {
-	schemaEndpoint = endpoint + '/_schema/' + urlParams.table;
-	dataEndpoint   = endpoint + '/_data/' + urlParams.table + "?filter=where id=" + urlParams.row;
-});
 
+$(document).ready(function() {
+	schemaEndpoint = base + endpoint + '/_schema/' + urlParams.table;
+	dataEndpoint   = base + endpoint + '/_data/' + urlParams.table + "?filter=where id=" + urlParams.row;
+});
 
 function adlogin (username, password, callback) {
 	$.ajax({
@@ -18,38 +18,8 @@ function adlogin (username, password, callback) {
 		}),
 		cache:false,
 		method:'POST',
-		retries: 3,
 		success:function (response) {
 			callback(response);
-		},
-		error:function (response) {
-			callback(response);
-			return false;
-		}
-	});
-}
-function init(params, callback) {
-	var url = arguments[2] || base + schemaEndpoint;
-	$.ajax({
-		dataType: 'json',
-		contentType: 'application/json; charset=utf-8',
-		url: url,
-		data: params,
-		cache:false,
-		method:'GET',
-		retries: 3,
-		headers: {
-			"X-DreamFactory-API-Key": api_key,
-			"X-DreamFactory-Session-Token": token
-		},
-		success:function (response) {
-			console.log(response);
-			if(typeof callback !== 'undefined') {
-				if (response.hasOwnProperty('resource'))
-					callback(response.resource);
-				else
-					callback(response);
-			}
 		},
 		error:function (response) {
 			callback(response);
@@ -58,8 +28,7 @@ function init(params, callback) {
 	});
 }
 
-function getData(params, callback) {
-	var url = arguments[2] || base + dataEndpoint
+function getDF(url, params, callback) {
 	$.ajax({
 		dataType: 'json',
 		contentType: 'application/json; charset=utf-8',
@@ -67,17 +36,15 @@ function getData(params, callback) {
 		data: params,
 		cache:false,
 		method:'GET',
-		retries: 3,
 		headers: {
 			"X-DreamFactory-API-Key": api_key,
 			"X-DreamFactory-Session-Token": token
 		},
 		success:function (response) {
 			if(typeof callback !== 'undefined') {
-				if (response.hasOwnProperty('resource'))
-					callback(response.resource);
-				else
-					callback(response);
+				callback(response);
+			} else {
+				callback(response);
 			}
 		},
 		error:function (response) {
@@ -95,7 +62,6 @@ function setData(params, callback) {
 		data: params,
 		cache:false,
 		method:'POST',
-		retries: 3,
 		headers: {
 			"X-DreamFactory-API-Key": api_key,
 			"X-DreamFactory-Session-Token": token
@@ -113,6 +79,10 @@ function setData(params, callback) {
 			return false;
 		}
 	});
+}
+
+function processSchema(response) {
+	var r = response;
 }
 
 function submit() {
