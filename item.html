@@ -104,11 +104,10 @@ customFormExists();
 
 <script>
 
-$(document).ready(function(){init()});
-
 $(document).ready(function() {
 	schemaEndpoint = base + endpoint + '/_schema/' + urlParams.table;
 	dataEndpoint   = base + endpoint + '/_table/' + urlParams.table + "?filter=id=" + urlParams.row;
+	init();
 });
 
 function init() {
