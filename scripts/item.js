@@ -85,24 +85,56 @@ function processSchema(response) {
 	var r = response,
 		t = $($('#inputTemplate').html()),
 		p = $('#mainForm');
+		
+	$('#entryName').html(response.label);
 	
 	console.log(r);
 	
 	$.each(r.field, function(i, v) {
+		if (v.name === 'last_update') return true; //skip last_update fields.
+		
 		var e = $(t.clone());
 		
 		$('label', e).text(v.label);
 		
 		switch (v.type) {
-			case 'id':
+			case 'id': //don't show ID fields
+			case 'pk':
+			case 'user_id_on_create': //skip the hidden userID fields.
+			case 'user_id_on_update':
+			case 'timestamp_on_create': // and skip hidden timestamps.
+			case 'timestamp_on_update':
 				return true;
+				break;
+			case 'integer':
+				$('input', e)[0].type = 'number';
+				$('input', e)[0].step = 1;
+				break;
+			case 'float':
+			case 'double':
+			case 'decimal':
+				$('input', e)[0].type = 'number';
+				break;
+			case 'boolean':
+			case 'binary': //going to store these two as selects with a T/F option.
+				$('input', e).replaceWith('<select class="form-control"><option value="true">True</option><option value="false">False</option></select>');
 				break;
 			case 'string':
 				$('input', e)[0].type = 'text';
-				$('input', e)[0].maxLength = 255;
+				$('input', e)[0].maxLength = v.length || 255;
 				break;
 			case 'text':
 				$('input', e).replaceWith('<textarea class="form-control"></textarea>');
+				break;
+			case 'datetime':
+			case 'timestamp':
+				$('input', e)[0].type = 'datetime-local';
+				break;
+			case 'date':
+				$('input', e)[0].type = 'date';
+				break;
+			case 'time':
+				$('input', e)[0].type = 'time';
 				break;
 			case 'reference':
 				$('input', e).replaceWith('<select class="form-control"></select>');
@@ -114,6 +146,15 @@ function processSchema(response) {
 					$('select', e).chosen({disable_search_threshold: 5});
 				});
 				break;
+			//userID - consider doing this.
+			
+		}
+		
+		$('input, select, textarea', e)[0].id = "field" + v.name;
+		$('input, select, textarea', e)[0].required = v.required;
+		
+		if (v.default) {
+			$('input, select, textarea', e).val(v.default);
 		}
 		
 		$(p).append(e);
