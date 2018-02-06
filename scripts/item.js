@@ -152,7 +152,7 @@ function processSchema(response) {
 		
 		$('input, select, textarea', e)[0].id = "field" + v.name;
 		$('input, select, textarea', e)[0].className += " formField";
-		$('input, select, textarea', e).attr('data-name', v.name);
+		$('input, select, textarea', e).attr('name', v.name);
 		$('input, select, textarea', e)[0].required = v.required;
 		
 		if (v.default) {
@@ -182,7 +182,7 @@ function submit() {
 	//submit
 	var data = {};
 	$('.formField').each(function (i, e) {
-		data[$(e).attr('data-name')] = $(e).val();
+		data[$(e).attr('name')] = $(e).val();
 	});
 	
 	var m = new moment(); 
