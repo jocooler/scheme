@@ -106,53 +106,23 @@ customFormExists();
 
 $(document).ready(function(){init()});
 
+$(document).ready(function() {
+	schemaEndpoint = base + endpoint + '/_schema/' + urlParams.table;
+	dataEndpoint   = base + endpoint + '/_table/' + urlParams.table + "?filter=id=" + urlParams.row;
+});
+
 function init() {
 	attachHandlers();
-	attemptLogin();
+	attemptLogin(processSchema);
 	disableNumberFieldScrolling();
 }
 
-function attemptLogin() {
-	//login or kickoff.
-	if (window.localStorage && window.localStorage.performanceDreamfactoryToken) {
-		token = window.localStorage.performanceDreamfactoryToken;
-		getDF(schemaEndpoint, {limit: 1}, function (r) {
-			if (r.status > 300) {
-				$('#login').modal({backdrop:'static', keyboard:false});
-			} else {
-				processSchema(r);
-			}
-		});
-	} else {
-		$('#login').modal({backdrop:'static', keyboard:false});
-	}
-}
 function attachHandlers() {
 	//attach some handlers
 	$('.submitMainForm').click(submit);
 	$('input, select, textarea').change(function() {
 		$('#submit').html('Submit').attr('disabled', false);
 	});
-}
-
-function login() {
-	adlogin($('#username').val(), $('#password').val(), 
-		function(response) {
-			$('#password').val('')
-			$('#loginerror').css('opacity', 0);
-			if (response.status > 300) {
-				setTimeout(function() {
-					$('#loginerror').css('opacity', 1);
-				}, 500);
-			} else {
-				$('#login').modal('hide');
-				console.log(arguments)
-				token = response.session_token;
-				window.localStorage.performanceDreamfactoryToken = response.session_token;
-				getDF(schemaEndpoint, null, processSchema);
-			}
-		}
-	);
 }
 
 //prevent scrolling from changing inputs in chrome.

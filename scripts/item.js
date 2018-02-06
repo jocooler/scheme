@@ -1,10 +1,5 @@
 var schemaEndpoint, dataEndpoint;
 
-$(document).ready(function() {
-	schemaEndpoint = base + endpoint + '/_schema/' + urlParams.table;
-	dataEndpoint   = base + endpoint + '/_table/' + urlParams.table + "?filter=id=" + urlParams.row;
-});
-
 function adlogin (username, password, callback) {
 	$.ajax({
 		dataType: 'json',
@@ -26,6 +21,43 @@ function adlogin (username, password, callback) {
 			return false;
 		}
 	});
+}
+
+
+function login(callback) {
+	adlogin($('#username').val(), $('#password').val(), 
+		function(response) {
+			$('#password').val('')
+			$('#loginerror').css('opacity', 0);
+			if (response.status > 300) {
+				setTimeout(function() {
+					$('#loginerror').css('opacity', 1);
+				}, 500);
+			} else {
+				$('#login').modal('hide');
+				console.log(arguments)
+				token = response.session_token;
+				window.localStorage.performanceDreamfactoryToken = response.session_token;
+				getDF(schemaEndpoint, null, callback);
+			}
+		}
+	);
+}
+
+function attemptLogin(callback) {
+	//login or kickoff.
+	if (window.localStorage && window.localStorage.performanceDreamfactoryToken) {
+		token = window.localStorage.performanceDreamfactoryToken;
+		getDF(schemaEndpoint, {limit: 1}, function (r) {
+			if (r.status > 300) {
+				$('#login').modal({backdrop:'static', keyboard:false});
+			} else {
+				callback(r);
+			}
+		});
+	} else {
+		$('#login').modal({backdrop:'static', keyboard:false});
+	}
 }
 
 function getDF(url, params, callback) {
