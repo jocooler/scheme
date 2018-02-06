@@ -1,1 +1,62 @@
-a
+<!doctype html>
+<html lang="en">
+<head>
+<title>Scheme</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+</head>
+<body>
+<div class="modal fade" id="login">
+	<div class="modal-dialog" role="document">
+		<form onsubmit="return false">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Please Login</h5>
+				</div>
+				<div class="modal-body">
+					<div class="p-3 mb-1 bg-danger text-white" id="loginerror">That didn't work. Please try to log in again.</div>
+					<div class="form-group">
+						<label for="username">Username *</label>
+						<input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="your username" required>
+						<small id="usernameHelp" class="form-text text-muted">The username to login to your computer or Office365, like apendragon.</small>
+					</div>
+					<div class="form-group">
+						<label for="password">Password *</label>
+						<input type="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="your password" required>
+						<small id="passwordHelp" class="form-text text-muted">The password to login to your computer or Office365, like 4correctbatteryhorse-staples.</small>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" onclick="login()">Login</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="container outside">
+	<h2 id="entryName"></h2>
+	<form id="mainForm">
+		<!-- paste form here -->
+	</form>
+	<button type="button" class="btn btn-primary submitMainForm">Submit</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+<script src="../scripts/connection.js"></script>
+<script src="../scripts/item.js"></script>
+
+<script>
+$(document).ready(function(){
+	$('.submitMainForm').click(submit);
+	attemptLogin(function(){});
+});
+</script>
+</body>
+</html>
