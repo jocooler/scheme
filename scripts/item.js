@@ -2,7 +2,7 @@ var schemaEndpoint, dataEndpoint;
 
 $(document).ready(function() {
 	schemaEndpoint = base + endpoint + '/_schema/' + urlParams.table;
-	dataEndpoint   = base + endpoint + '/_table/' + urlParams.table + "?filter=where id=" + urlParams.row;
+	dataEndpoint   = base + endpoint + '/_table/' + urlParams.table + "?filter=id=" + urlParams.row;
 });
 
 function adlogin (username, password, callback) {
@@ -158,6 +158,17 @@ function processSchema(response) {
 		}
 		
 		$(p).append(e);
+	});
+	getCurrentValues(); //todo wrap this in logic and remove to kickoff function.
+}
+
+function getCurrentValues() {
+	getDF(dataEndpoint, null, function(response) {
+		console.log(response);
+		$.each(response.resource[0], function(k, v) {
+			$('#field' + k).val(v).change();
+		});
+		$('select').trigger("chosen:updated");
 	});
 	
 }
