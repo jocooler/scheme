@@ -58,10 +58,10 @@ function setData(params, callback) {
 	$.ajax({
 		dataType: 'json',
 		contentType: 'application/json; charset=utf-8',
-		url: base + dataEndpoint,
+		url: dataEndpoint,
 		data: params,
 		cache:false,
-		method:'POST',
+		method:'PATCH',
 		headers: {
 			"X-DreamFactory-API-Key": api_key,
 			"X-DreamFactory-Session-Token": token
@@ -151,6 +151,8 @@ function processSchema(response) {
 		}
 		
 		$('input, select, textarea', e)[0].id = "field" + v.name;
+		$('input, select, textarea', e)[0].className += " formField";
+		$('input, select, textarea', e).attr('data-name', v.name);
 		$('input, select, textarea', e)[0].required = v.required;
 		
 		if (v.default) {
@@ -178,7 +180,14 @@ function submit() {
 	//validate
 		// error
 	//submit
-	var data = {date:date.format('YYYY-MM-DD'), measure: measure.id, status:story, target:target || 0, value: value};
+	var data = {};
+	$('.formField').each(function (i, e) {
+		data[$(e).attr('data-name')] = $(e).val();
+	});
+	
+	var m = new moment(); 
+	data.last_update = m.format('YYYY-MM-DD'); //todo time???
+	
 	setData(JSON.stringify({"resource": [data]}), function(r) {
 		$('#submit').html('✔ Submitted').attr('disabled', 'disabled');
 	});

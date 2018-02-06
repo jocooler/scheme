@@ -40,7 +40,9 @@
 <div class="container outside">
 	<h2 id="entryName"></h2>
 	<form id="mainForm">
+		
 	</form>
+	<button type="button" class="btn btn-primary submitMainForm">Submit</button>
 	<template id="inputTemplate" style="display:none;">
 		<div class="form-group">
 			<label class="form-control-label"></label>
@@ -94,7 +96,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	//attach some handlers
-	$('#submit').click(submit);
+	$('.submitMainForm').click(submit);
 	$('input, select, textarea').change(function() {
 		$('#submit').html('Submit').attr('disabled', false);
 	});
