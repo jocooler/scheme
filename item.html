@@ -4,6 +4,49 @@
 <title>Scheme</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script>
+/*
+	Check if a specific form exists. If so, don't do anything else.
+*/
+
+//parse query string.
+//?table=table&row=row
+var urlParams;
+(window.onpopstate = function () {
+    var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+        query  = window.location.search.substring(1);
+
+    urlParams = {};
+    while (match = search.exec(query))
+       urlParams[decode(match[1])] = decode(match[2]);
+})();
+
+
+
+function customFormExists() {
+    var http = new XMLHttpRequest();
+    http.open('HEAD', 'content/' + urlParams.table + '.html');
+    http.onreadystatechange = function() {
+        if (this.readyState == this.DONE) {
+            if (this.status < 300) {
+				//redirect
+				window.location.replace('content/' + urlParams.table + '.html?row=' + urlParams.row || '');
+			} else {
+				//carry on
+				$(document).ready(function(){init()});
+			}
+        }
+    };
+    http.send();
+}
+
+customFormExists();
+</script>
+
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 <link rel="stylesheet" href="vendor/datatables/dataTables.bootstrap4.min.css"/>
 <link rel="stylesheet" href="vendor/chosen/chosen.min.css">
@@ -63,22 +106,13 @@
 <script src="scripts/item.js"></script>
 
 <script>
-//parse query string.
-//?table=table&row=row
-var urlParams;
-(window.onpopstate = function () {
-    var match,
-        pl     = /\+/g,  // Regex for replacing addition symbol with a space
-        search = /([^&=]+)=?([^&]*)/g,
-        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-        query  = window.location.search.substring(1);
+function init() {
+	attachHandlers();
+	attemptLogin();
+	disableNumberFieldScrolling();
+}
 
-    urlParams = {};
-    while (match = search.exec(query))
-       urlParams[decode(match[1])] = decode(match[2]);
-})();
-
-$(document).ready(function() {
+function attemptLogin() {
 	//login or kickoff.
 	if (window.localStorage && window.localStorage.performanceDreamfactoryToken) {
 		token = window.localStorage.performanceDreamfactoryToken;
@@ -92,15 +126,14 @@ $(document).ready(function() {
 	} else {
 		$('#login').modal({backdrop:'static', keyboard:false});
 	}
-});
-
-$(document).ready(function() {
+}
+function attachHandlers() {
 	//attach some handlers
 	$('.submitMainForm').click(submit);
 	$('input, select, textarea').change(function() {
 		$('#submit').html('Submit').attr('disabled', false);
 	});
-});
+}
 
 function login() {
 	adlogin($('#username').val(), $('#password').val(), 
@@ -123,7 +156,7 @@ function login() {
 }
 
 //prevent scrolling from changing inputs in chrome.
-$(document).ready(function() {
+function disableNumberFieldScrolling() {
 	$('input[type=number], input[type=date]').on('mousewheel wheel',function(e){ $(this).blur(); });
 	var year = new Date().getFullYear();
 	for (var i = 0; i<35; i++) {
@@ -131,7 +164,7 @@ $(document).ready(function() {
 			selected = (n === year) ? ' selected="selected"' : ''; //auto select this year.
 		$('select.year').append('<option val="' + n +'"'+ selected + '>' + n + '</option>');
 	}
-});
+}
 
 </script>
 
