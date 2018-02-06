@@ -34,9 +34,6 @@ function customFormExists() {
             if (this.status < 300) {
 				//redirect
 				window.location.replace('content/' + urlParams.table + '.html?row=' + urlParams.row || '');
-			} else {
-				//carry on
-				$(document).ready(function(){init()});
 			}
         }
     };
@@ -106,6 +103,9 @@ customFormExists();
 <script src="scripts/item.js"></script>
 
 <script>
+
+$(document).ready(function(){init()});
+
 function init() {
 	attachHandlers();
 	attemptLogin();
