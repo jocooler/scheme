@@ -114,7 +114,7 @@ function login() {
 				console.log(arguments)
 				token = response.session_token;
 				window.localStorage.performanceDreamfactoryToken = response.session_token;
-				getDF(schemaEndpoint, null, processSchema(r));
+				getDF(schemaEndpoint, null, processSchema);
 			}
 		}
 	);

@@ -2,7 +2,7 @@ var schemaEndpoint, dataEndpoint;
 
 $(document).ready(function() {
 	schemaEndpoint = base + endpoint + '/_schema/' + urlParams.table;
-	dataEndpoint   = base + endpoint + '/_data/' + urlParams.table + "?filter=where id=" + urlParams.row;
+	dataEndpoint   = base + endpoint + '/_table/' + urlParams.table + "?filter=where id=" + urlParams.row;
 });
 
 function adlogin (username, password, callback) {
@@ -95,7 +95,7 @@ function processSchema(response) {
 		
 		switch (v.type) {
 			case 'id':
-				$('input', e)[0].type = 'number';
+				return true;
 				break;
 			case 'string':
 				$('input', e)[0].type = 'text';
@@ -103,10 +103,22 @@ function processSchema(response) {
 				break;
 			case 'text':
 				$('input', e).replaceWith('<textarea class="form-control"></textarea>');
+				break;
+			case 'reference':
+				$('input', e).replaceWith('<select class="form-control"></select>');
+				getDF(base + endpoint + '/_table/' + v.ref_table, null, function(o) {
+					console.log(o);
+					$.each(o.resource, function (j, option) {
+						$('.form-control', e).append('<option value="' + option.id + '">' + option.name + '</option>');
+					});
+					$('select', e).chosen({disable_search_threshold: 5});
+				});
+				break;
 		}
 		
 		$(p).append(e);
 	});
+	
 }
 
 function submit() {
