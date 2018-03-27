@@ -6,6 +6,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+<!-- This file displays a generic table structure. Item.html shows single item entry/edit forms. -->
+
 <link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
 <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
@@ -101,7 +103,7 @@
 <script src="scripts/connection.js"></script>
 <script src="scripts/app.js"></script>
 <script>
-var	tableName = 'measures',
+var	tableName = startTable,
 	token = '';
 	
 if (window.location.hash) {
@@ -170,11 +172,11 @@ function adlogin (username, password, callback) {
 	$.ajax({
 		dataType: 'json',
 		contentType: 'application/json; charset=utf-8',
-		url: base + '/api/v2/user/session?service=aot-ad',
+		url: base + '/api/v2/user/session?service=' + loginService,
 		data: JSON.stringify({
 			"username": username,
 			"password": password,
-			"service": "aot-ad",
+			"service": loginService,
 			"remember_me": true
 		}),
 		cache:false,
