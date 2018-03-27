@@ -17,9 +17,9 @@ check if the custom template exists,
 -->
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
-<link rel="stylesheet" href="vendor/datatables/dataTables.bootstrap4.min.css"/>
-<link rel="stylesheet" href="vendor/chosen/chosen.min.css">
-<link rel="stylesheet" href="styles/data.css">
+<link rel="stylesheet" href="../vendor/datatables/dataTables.bootstrap4.min.css"/>
+<link rel="stylesheet" href="../vendor/chosen/chosen.min.css">
+<link rel="stylesheet" href="../styles/data.css">
 </head>
 <body>
 <div class="modal fade" id="login">
@@ -120,19 +120,20 @@ check if the custom template exists,
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="vendor/chosen/chosen.jquery.min.js"></script>
+<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="../vendor/chosen/chosen.jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
-<script src="scripts/connection.js"></script>
-<script src="scripts/data.js"></script>
+<script src="../scripts/connection.js"></script>
+<script src="../scripts/data.js"></script>
 <script>
 var	measureName = 'Please chose a measure',
 	value = '',
 	target = '';
 	token = '',
 	measures = {},
-	measure = {};
+	measure = {},
+	factsheetURL = "http://aotapps/tachometer/factsheet.html#"
 	
 $(document).ready(function() {
 	$('#submit').click(submit);
